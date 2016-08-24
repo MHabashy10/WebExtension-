@@ -1,0 +1,58 @@
+{
+	"name": "TelePlus",
+	"description": "Detects Telephone Numbers in Chrome Tabs, making them able to dial.",
+	"author": "M.Habahsy",
+	"permissions": [
+		"tabs",
+		"storage",
+		"activeTab",
+		 "http://*/*", "https://*/*"
+	],
+	"version": "0.10.0",
+	"manifest_version": 2,
+	"options_page": "options/options.html",
+	"background": {
+		"scripts": [
+			"app/lib/angular.min.js",
+			"app/js/Process.js",
+			"app/js/Background.js"
+		]
+	},
+	"browser_action": {
+		"default_popup": "app/index.html",
+		"default_icon": "images/LOGO.png",
+		// "default_icon": {
+		// 	"128": "images/Icon128.png",
+		// 	"32": "images/Icon32.png",
+		// 	"48": "images/Icon48.png",
+		// 	"19": "images/Icon18.png"
+		// },
+		"default_title": "Teleplus Telephone number detection"
+	},
+	"content_scripts": [
+		{
+			"all_frames": true,
+			"js": [
+				"app/lib/angular.min.js",
+				"app/js/ContentPage.js"
+			],
+			"matches": [
+				"<all_urls>"
+			],
+			"run_at": "document_end"
+		}
+	],
+	"icons": {
+		"16": "images/LOGO.png",
+		"48": "images/LOGO.png",
+		"128": "images/LOGO.png"
+	}
+	
+	// "icons": {
+	// 	"128": "images/Icon128.png",
+	// 	"32": "images/Icon32.png",
+	// 	"48": "images/Icon48.png",
+	// 	"19": "images/Icon18.png"
+	// }
+	
+}

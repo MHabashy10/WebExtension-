@@ -1,0 +1,25 @@
+<p>Login Page.</p>
+
+<button ng-click="onCLick()">Click Me </button>
+
+
+<form role="form" name="loginForm" ng-submit="login(username, password)">
+  <div class="form-group">
+    <label for="username">User Name:</label>
+    <input name="username" type="username" ng-model="username" class="form-control" id="username" required>
+    <div
+     ng-show="loginForm.username.$invalid&&loginForm.username.$touched" 
+     class="alert alert-danger">Please Enter a Valid User Name.</div>
+  </div>
+  <div class="form-group">
+    <label for="pwd">Password:</label>
+    <input name="password" type="password" class="form-control" id="pwd" ng-model="password" required>
+     <div
+     class="alert alert-danger"
+      ng-show="loginForm.password.$invalid&&loginForm.password.$touched">Please Enter Password</div>
+  </div>
+  <!--<div class="checkbox">
+    <label><input type="checkbox"> Remember me</label>
+  </div>-->
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>
