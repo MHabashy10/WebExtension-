@@ -1,13 +1,14 @@
 {
   "name": "ut-chrome-ext",
   "version": "1.0.0",
-  "description": "Ulta Tel Chrome Extension",
-  "main": "index.js",
+  "description": "UltaTel Chrome Extension",
   "scripts": {
      "start": "lite-server -c lite-config.json",
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "M.Habashy",
+  "contributors": [
+    "Mohamed Habashy  (https://github.com/Mohamed-Habshey)"
+  ],
   "license": "ISC",
   "devDependencies": {
     "lite-server": "^2.2.2"
