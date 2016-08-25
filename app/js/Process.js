@@ -6,15 +6,15 @@
 
 
 
-var Process = function() {
-    var updateBadge = function(text, color, icon, title) {
+var Process = function () {
+    var updateBadge = function (text, color, icon, title) {
         chrome.browserAction.setBadgeText({ 'text': text });
         chrome.browserAction.setBadgeBackgroundColor({ 'color': color });
         chrome.browserAction.setIcon({ path: icon });
         chrome.browserAction.setTitle({ title: title });
     };
 
-    var sendPageRequest = function(request) {
+    var sendPageRequest = function (request) {
         var requestOptions = {};
         switch (request) {
             case 'parseDOM':
@@ -23,22 +23,22 @@ var Process = function() {
             case 'clearDOM':
                 requestOptions.clearDOM = true;
                 break;
-			case 'isPageComplete':
+            case 'isPageComplete':
                 requestOptions.isPageComplete = true;
                 break;
         }
-		
-		chrome.tabs.query({}, function(tabs) {
-			for (var i=0; i<tabs.length; ++i) {
-				chrome.tabs.sendMessage(tabs[i].id, requestOptions);
-			}
-		});
+
+        chrome.tabs.query({}, function (tabs) {
+            for (var i = 0; i < tabs.length; ++i) {
+                chrome.tabs.sendMessage(tabs[i].id, requestOptions);
+            }
+        });
 
     };
 
     var pref = Preferences; // alias for the Preferences object
     return {
-        init: function() {
+        init: function () {
             var ON = pref.get('enabled');
             if (ON) {
                 this.enable();
@@ -46,7 +46,7 @@ var Process = function() {
                 this.disable();
             }
         },
-        enable: function() {
+        enable: function () {
             pref.set('enabled', true);
             var text = pref.get('badgeOnText');
             var color = pref.get('badgeOnColor');
@@ -55,7 +55,7 @@ var Process = function() {
             updateBadge(text, color, icon, title);
             sendPageRequest('parseDOM');
         },
-        disable: function() {
+        disable: function () {
             pref.set('enabled', false);
             var text = pref.get('badgeOffText');
             var color = pref.get('badgeOffColor');
@@ -64,10 +64,10 @@ var Process = function() {
             updateBadge(text, color, icon, title);
             sendPageRequest('clearDOM');
         },
-		isPageComplete: function() {
+        isPageComplete: function () {
             sendPageRequest('isPageComplete');
         },
-        toggle: function() {
+        toggle: function () {
             var ON = pref.get('enabled');
             if (ON) {
                 this.disable();
@@ -77,7 +77,7 @@ var Process = function() {
         }
     }
 }
-
+var storageArea = chrome.storage.sync ? chrome.storage.sync : chrome.storage.local
 var Preferences = {
     defaults: {
         timeout: 3000,
@@ -91,8 +91,8 @@ var Preferences = {
         badgeOnIcon: 'images/Enabled.png',
         badgeOffIcon: 'images/Disabled.png'
     },
-    set: function(name, value) { window.localStorage[name] = JSON.stringify(value); chrome.storage.sync.set({'telEnabled': value}); },
-    get: function(name) {
+    set: function (name, value) { window.localStorage[name] = JSON.stringify(value); storageArea.set({ 'telEnabled': value }); },
+    get: function (name) {
         var value = window.localStorage[name];
         if (value == null || value == undefined) { value = this.defaults[name]; }
         else { value = JSON.parse(value); }

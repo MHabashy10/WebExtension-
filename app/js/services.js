@@ -3,7 +3,7 @@
 angular.module('tpce.services', [])
 
 
-    .factory('$TPuser', ['$http', function ($http) {
+    .factory('$UTuser', ['$http', function ($http) {
 
         //var url = "https://tpcrm.teleplus.net/home/";
         var url = "http://localhost:61409/home/";
@@ -25,20 +25,21 @@ angular.module('tpce.services', [])
     }])
 
     .factory('$storage' , function () {
+        var storageArea= chrome.storage.sync? chrome.storage.sync : chrome.storage.local;
         return {
             set: function (object) {
-                chrome.storage.sync.set(object, function () {
+               storageArea.set(object, function () {
                     // Notify that we saved.
                     alert('Settings saved');
                 });
             },
             get: function (key, cb) {
-                chrome.storage.sync.get(key, function (object) {
+                storageArea.get(key, function (object) {
                     cb(object);
                 });
             },
             remove: function (key, cb) {
-                chrome.storage.sync.remove(key, function (object) {
+                storageArea.remove(key, function (object) {
                     cb(object);
                 });
             }

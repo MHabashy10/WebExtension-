@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "UltaTel Chrome Extension",
   "scripts": {
-     "start": "lite-server -c lite-config.json",
+     "start": "lite-server -c lite-config.json"
   },
   "author": "M.Habashy",
   "contributors": [

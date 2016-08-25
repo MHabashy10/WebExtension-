@@ -7,7 +7,8 @@
 
 var pref = Preferences; // alias for the Preferences object
 var ext = new Process();
-var tpUser="";
+var utUser = "";
+var storageArea = chrome.storage.sync ? chrome.storage.sync : chrome.storage.local
 ext.init(); // set the initial state of the extension icon (ON/OFF)
 chrome.browserAction.onClicked.addListener(function (TAB) { ext.toggle(); });
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
@@ -15,54 +16,55 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 });
 
 window.setInterval(function () { ext.isPageComplete(); }, 5000);
-chrome.storage.sync.get("tpUser", function (obj) {
-		tpUser =  obj.tpUser ;
-	});
+storageArea.get("utUser", function (obj) {
+		utUser = obj.utUser;
+});
 chrome.storage.onChanged.addListener(function (changes) {
-  console.log(changes);
- if (changes.tpUser != undefined){
-   tpUser = changes.tpUser.newValue;
-  if (tpUser) {
-                ext.enable();
-            } else {
-                ext.disable();
-              
-            }
- }
+  
+  if (changes.utUser != undefined) {
+    utUser = changes.utUser.newValue;
+    console.log("utUser",changes);
+    if (utUser) {
+      ext.enable();
+    } else {
+      ext.disable();
+
+    }
+  }
 })
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   // message.searchText is the text that was captured in the popup    
   // Search/Highlight code goes here
-if (message.call){
-  console.log("Message: ", JSON.stringify(message));
-  console.log("sender: ", JSON.stringify(sender));
-  var data = new FormData();
-data.append('DestinationPhoneNo', message.call);
-data.append('UserExtension', tpUser.MyExtension);
-data.append('UserID', tpUser.UserId);
+  if (message.call) {
+    console.log("Message: ", JSON.stringify(message));
+    console.log("sender: ", JSON.stringify(sender));
+    var data = new FormData();
+    data.append('DestinationPhoneNo', message.call);
+    data.append('UserExtension', utUser.MyExtension);
+    data.append('UserID', utUser.UserId);
 
 
-var xhr = new XMLHttpRequest();
-xhr.open('POST', 'https://tpcrm.teleplus.net/home/CreateCallFile', true);
-xhr.onload = function () {
-    // do something to response
-    console.log(this.responseText);
-    
-};
-xhr.send(data);
-sendResponse({ farewell: "Calling:"+message.call });
-  //console.log("sendResponse: ", JSON.stringify(sendResponse));
-  
-}
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'https://tpcrm.teleplus.net/home/CreateCallFile', true);
+    xhr.onload = function () {
+      // do something to response
+      console.log(this.responseText);
+
+    };
+    xhr.send(data);
+    sendResponse({ farewell: "Calling:" + message.call });
+    //console.log("sendResponse: ", JSON.stringify(sendResponse));
+
+  }
 });
 
 
 
 inject = function (tab) {
 
-    chrome.tabs.executeScript(tab.id, {
-        code: `
+  chrome.tabs.executeScript(tab.id, {
+    code: `
 
       
         chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
@@ -87,11 +89,11 @@ inject = function (tab) {
 	});
  
         `});
-        } ;
+};
 //   chrome.tabs.query({}, function (tabs) {
 //     for (var i = 0; i < tabs.length; ++i) {
 // inject(tabs[i]);
-    
+
 //     }
 //   });
 
@@ -101,9 +103,9 @@ inject = function (tab) {
 //   inject(tab);
 // })
 
-chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
- // console.log(changeInfo);
-  if(changeInfo.status=='loading'&&changeInfo.url);
-//  inject(tab);
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+  // console.log(changeInfo);
+  if (changeInfo.status == 'loading' && changeInfo.url);
+  //  inject(tab);
 })
 

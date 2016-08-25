@@ -10,12 +10,12 @@ var invalidNumbers = [];
 var validNumbers = [];
 var parsing = false;
 var protocol = "";
-//var tpUser="";
+//var utUser="";
 var minTelVal = 0;
 var maxTelVal = 0;
 var r_enabled = false;
 var r_types = { "tel": false, "dial": false, "callto": false, "ucdial": false, "sip": false };
-
+var storageArea = chrome.storage.sync ? chrome.storage.sync : chrome.storage.local;
 
 
 var handsetImage = "iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAB3RJTUUH3gcWEAU3+l7xlgAAApJJREFUOMuVkk1IVGEUht/z3TuO482s1FTIJH8wQYXsnzLLhZUWEtYuClqYiwosSyhJIZJiNkUZLoxaFEJZbQzKRQSGVIgI5cLf0HGc1HG8c0fHmTv3+75WQkSL67s85zzP5j0Emyls/upIS3LWqYqyvByJdX1p3GkAgGpXkODAoZVIrAVkuVxOtRDAVQBgduDi272aynB2ak7f+MsXcC2GVmoP3u8/Z1sQryBvIbh0hHNOBAHfgqGZMV6d0/Q90ZYgHI0VmKaZKQWHFAKQHN553RGzuMOWwAibwUg0NigF51IKSCG54NbPqXv7A7YEUdPs4UKcgeSDUnBAckOC3mCtyavv7kyt7ZJpde9erc6YXfiou6/EwVAmBQ9JwdvXJDj18Ft6JBJt9etGCknRJkG9qztbj2SEli9N+fzllmVNMKY88OfXxJIea+CWAP19WNbywZmXtSWNS8w8u1BoHWh670hK1Go8s4GO6Tk9zBTluKvi+uDp3FKuOlcwujgNZRWudn9OSdmwrsHjm2tI0pxeV9GJiYzUTdXzi4Z7zPNbYQpr1HMbe87vLuVR1YPZ8DxmlgJQ993oUjIzNm9fiZgdfQNDJXoo7FjUjbaCnK3Dk775PcPj0/FE1CSFeOFaH7LCIoRAQMWCCKK56AnU9NTkyoAedA8MjeZbXIIYw9ikN3t8aiZbAn7G1DsgeqR31nFthwuRcALai19ixPqB7ORtUFju4Ysj45NVFudEAAgSIAJB6gqjeiI8D76+bAJAbK8Fv+qDh4+gKqsSxz5WgLSTrcWQ0k1E5SBSiRgnxvpB7Kbx9tqnfxtR7hKkxkCOOHBDgwqJIIBWQD4FKbtA5JVCdEONm/hfpfyWBK5wQHBAGPgDf9c6qAYOxxMAAAAASUVORK5CYII="
@@ -39,10 +39,11 @@ chrome.storage.onChanged.addListener(function (changes) {
 	if (changes.minTelVal != undefined) minTelVal = parseInt(changes.minTelVal.newValue);
 	if (changes.maxTelVal != undefined) maxTelVal = parseInt(changes.maxTelVal.newValue);
 
-	chrome.storage.sync.get("telEnabled", function (obj) {
+	storageArea.get("telEnabled", function (obj) {
 		var shouldRescan = (changes.telEnabled != undefined) ? obj.telEnabled : true;
-			
-		if (shouldRescan) {
+
+		if (shouldRescan && obj.telEnabled) {
+
 			clearDOM();
 			parseDOM(document.body);
 		}
@@ -50,23 +51,23 @@ chrome.storage.onChanged.addListener(function (changes) {
 });
 
 function loadConfig() {
-	chrome.storage.sync.get("protocol", function (obj) {
+	storageArea.get("protocol", function (obj) {
 		protocol = (obj.protocol != undefined) ? obj.protocol : "dial";
 	});
 
-	// chrome.storage.sync.get("tpUser", function (obj) {
-	// 	tpUser =  obj.tpUser ;
+	// storageArea.get("utUser", function (obj) {
+	// 	utUser =  obj.utUser ;
 	// });
 
-	chrome.storage.sync.get("minTelVal", function (obj) {
+	storageArea.get("minTelVal", function (obj) {
 		minTelVal = (obj.minTelVal != undefined) ? parseInt(obj.minTelVal) : 8;
 	});
 
-	chrome.storage.sync.get("maxTelVal", function (obj) {
+	storageArea.get("maxTelVal", function (obj) {
 		maxTelVal = (obj.maxTelVal != undefined) ? parseInt(obj.maxTelVal) : 20;
 	});
 
-	chrome.storage.sync.get("replaceList", function (obj) {
+	storageArea.get("replaceList", function (obj) {
 		replaceList = (obj.replaceList != undefined) ? JSON.parse(obj.replaceList) : {};
 		r_enabled = replaceList["enable"];
 		var rTypes = Object.keys(r_types);
@@ -85,21 +86,25 @@ function handleDomChange(e) {
         var targetNode = (e.relatedNode) ? e.relatedNode : e.target;
         parsing = true;
         setTimeout(function () {
-            parseDOM(targetNode);
+			parseDOM(targetNode);
             parsing = false;
         }, 10);
     }
 }
 
 function alterDOM(request) {
-    if (request.parseDOM  ) {
+
+    if (request.parseDOM) {
         enabled = true;
 		clearDOM();
-		
+
         parseDOM(document.body);
     } else if (request.clearDOM) {
         enabled = false;
-        clearDOM();
+
+		clearDOM();
+
+
     } else if (request.isPageComplete) {
 		if (document.readyState === "complete") {
 			if (enabled) {
@@ -117,23 +122,23 @@ function alterDOM(request) {
 
 function clearDOM() {
 	//[angular.element(document.body.getElementsByClassName("DetectedNumberImg"))].forEach(function (element) {
-		//$('.DetectedNumberImg').each(function() {
+	//$('.DetectedNumberImg').each(function() {
 	//	angular.element(
-		parsing = true;
-			angular.element(
-			document.body.getElementsByClassName("DetectedNumberImg"))
+	parsing = true;
+	angular.element(
+		document.body.getElementsByClassName("DetectedNumberImg"))
 		//	)
-			.remove();
-		//  $(this).replaceWith("");
-   // });
+		.remove();
+	//  $(this).replaceWith("");
+	// });
 	angular.forEach(
 		angular.element(
 			document.body.getElementsByClassName("DetectedNumber")), function (element) {
-		// $('.DetectedNumber').each(function() {
-		angular.element(element).replaceWith(element.innerHTML);
-		
-		//  $(this).replaceWith(this.innerHTML);
-    });
+				// $('.DetectedNumber').each(function() {
+				angular.element(element).replaceWith(element.innerHTML);
+
+				//  $(this).replaceWith(this.innerHTML);
+			});
 	parsing = false;
 }
 
