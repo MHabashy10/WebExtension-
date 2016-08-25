@@ -1,6 +1,6 @@
 
 
-angular.module('tpce.services', [])
+angular.module('UltaTelWE.services', [])
 
 
     .factory('$UTuser', ['$http', function ($http) {

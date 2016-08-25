@@ -1,5 +1,5 @@
 /*
-*	Telephone Number Detection
+*	Click2Call Web Extension
 *	Mohamed Habashy
 *	mohamed.habshey10@gmail.com
 */
@@ -8,12 +8,12 @@
 'use strict';
 
 // Declare app level module which depends on views, and components
-angular.module('tpce', [
+angular.module('UltaTelWE', [
   'ui.router',
   'ui.bootstrap',
-  'tpce.controllers',
-  'tpce.services',
-  // 'tpce.version',
+  'UltaTelWE.controllers',
+  'UltaTelWE.services',
+  // 'UltaTelWE.version',
 ]).
   config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
     $stateProvider

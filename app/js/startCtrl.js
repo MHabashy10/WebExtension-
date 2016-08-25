@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('tpce.controllers')
+angular.module('UltaTelWE.controllers')
 
 
   .controller('startCtrl', ["$scope", "$state", "$storage", function ($scope, $state, $storage) {

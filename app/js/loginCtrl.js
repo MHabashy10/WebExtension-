@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('tpce.controllers', [])
+angular.module('UltaTelWE.controllers', [])
 
   //.config(['$routeProvider', function($routeProvider) {
   //    $urlRouterProvider.state('login', {
