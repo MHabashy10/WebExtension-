@@ -9,7 +9,7 @@ angular.module('tpce.controllers', [])
   //   });
   // }])
 
-  .controller('loginCtrl', ["$scope", "$state", "$TPuser", "$storage", function ($scope, $state, $TPuser, $storage) {
+  .controller('loginCtrl', ["$scope", "$state", "$UTuser", "$storage", function ($scope, $state, $UTuser, $storage) {
     $scope.count = 0;
 
     $scope.login = function (username, password) {
@@ -17,7 +17,7 @@ angular.module('tpce.controllers', [])
       //  console.log(username, password);
 
 
-      $TPuser.login(username, password)
+      $UTuser.login(username, password)
         .then(function (result) {
           if (!!~result.data.indexOf("Invalid")) {
             alert("Invalid Credentials Please Try Again!");
@@ -25,7 +25,7 @@ angular.module('tpce.controllers', [])
           else {
             var userData = JSON.parse(result.data);
             $storage.set({
-              'tpUser': {
+              'utUser': {
                 'UserId': userData.UserId,
                 'MyExtension': userData.MyExtension,
                 'Name': userData.Name

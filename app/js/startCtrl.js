@@ -6,15 +6,15 @@ angular.module('tpce.controllers')
   .controller('startCtrl', ["$scope", "$state", "$storage", function ($scope, $state, $storage) {
 
     $scope.logout = function () {
-      $storage.remove('tpUser', function (res) {
+      $storage.remove('utUser', function (res) {
         console.log(res);
         $state.go('login');
       });
     }
 
-    $storage.get('tpUser', function (params) {
-      $scope.UserName = params.tpUser.Name;
-      $scope.MyExtension = params.tpUser.MyExtension;
+    $storage.get('utUser', function (params) {
+      $scope.UserName = params.utUser.Name;
+      $scope.MyExtension = params.utUser.MyExtension;
     })
     $scope.searchText = function (search) {
       // var search = document.getElementById('searchText').value;

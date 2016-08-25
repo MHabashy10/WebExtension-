@@ -24,7 +24,7 @@ angular.module('tpce', [
         resolve: {
           isLoggedIn: function ($storage, $state) {
             $storage.get(
-              'tpUser', function (user) {
+              'utUser', function (user) {
                 console.log(user);
                 if(!!Object.keys(user).length)
                  $state.go('start');
