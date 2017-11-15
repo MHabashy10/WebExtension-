@@ -1,13 +1,14 @@
 {
   "name": "ut-chrome-ext",
   "version": "1.0.0",
-  "description": "UltaTel Chrome Extension",
+  "description": "UltaTel Web Extension",
   "scripts": {
      "start": "lite-server -c lite-config.json"
   },
-  "author": "M.Habashy",
+  "author": "Mohamed Habashy",
   "contributors": [
-    "Mohamed Habashy  (https://github.com/Mohamed-Habshey)"
+    "Mohamed Habashy  (https://github.com/Mohamed-Habshey)",
+	"Marwa Mohamed"
   ],
   "license": "ISC",
   "devDependencies": {
