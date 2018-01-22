@@ -3,15 +3,15 @@
   "version": "1.0.0",
   "description": "UltaTel Web Extension",
   "scripts": {
-     "start": "lite-server -c lite-config.json"
+    "start": "lite-server -c lite-config.json"
   },
   "author": "Mohamed Habashy",
   "contributors": [
     "Mohamed Habashy  (https://github.com/Mohamed-Habshey)",
-	"Marwa Mohamed"
+    "Marwa Mohamed"
   ],
   "license": "ISC",
   "devDependencies": {
-    "lite-server": "^2.2.2"
+    "lite-server": "^2.3.0"
   }
 }
